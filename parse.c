@@ -3,79 +3,53 @@
 #include "opcodedef.h"
 
 ULONG tpa[TPA_SIZE];
-ULONG *here;
+ULONG *hre;
+
+int defmode;
+
+ULONG *here()
+{
+  return hre;
+}
 
 void parse(char *line)
 {
-  int defmode = 0;
   char *tok,buf[8192];
-  struct wordlist *t,*co;
+  struct wordlist *co;
   ULONG *tt,*loc,*ttt;
   int i;
-  
-  here = tpa;
+  void (*apa)();
+
+  defmode = 0;
+
+  hre = tt = tpa;
 
   line = strs(line); /* remove blanks */
-
-  if(*line==':')
-    {
-      tok = (char *)strtok(line," ");
-      defmode = 1;
-      
-      if(!(tok = (char *)strtok(0," ")))
-	{
-	  puts("Bad definition.");
-	  return;
-	}
-    }
-  else 
-    {
-      strcpy(buf,"temp_word ");
-      strcat(buf,line);
-      tok = (char *)strtok(buf," ");
-    }
-      
-  if(!(make_word_header(tok)))
-    {
-      puts("out of memory.");
-      return;
-    }
   
-  t = (struct wordlist *)get_last();
-  tt = (ULONG *)t->next;
-  t->does = tt;
- 
+  tok = (char *)strtok(line," \t\n");
 
   while(1)
     {
-      tok = (char *)strtok(0," ");
-      
       if(tok && *tok=='\n')
 	{
 	  if(!defmode)
 	    {
 	      *tt = RTS;
-	      exec(t->does);
-	      forget_words("temp_word");
+	      update_pointers(sizeof(ULONG));
+	      exec(tpa);
 	      return;
 	    }
 	  else
 	    {
 	      line = strs(line);
-	      tok = (char *)strtok(line," ");
+	      tok = (char *)strtok(line," \t\n");
 	    }
 	}
-      if(!tok || *tok==';')
+      if(!tok)
 	{
 	  *tt = RTS;
 	  update_pointers(sizeof(ULONG));
-	  t->flags = W_SMUDGE;
-
-	  if(!defmode)
-	    {
-	      exec(t->does);
-	      forget_words("temp_word");
-	    }
+	  exec(tpa);
 	  return;
 	}
 
@@ -96,8 +70,7 @@ void parse(char *line)
 	    }
 	  else
 	    {
-	      puts(tok);
-	      puts("bad word");
+	      printf("Bad word: %s\n",tok);
 	      return;
 	    }
 	}
@@ -105,7 +78,14 @@ void parse(char *line)
 	{
 	  if(co->flags & W_IMMEDIATE)
 	    {
-	      exec(co->does);
+
+	      if(co->flags & W_SYSCALL)
+		{
+		  apa = co->does;
+		  apa();
+		}
+	      else
+		exec(co->does);
 	      tt = (ULONG *)here();
 	    }
 	  else
@@ -119,7 +99,6 @@ void parse(char *line)
 	    else
 	      if(co->flags & W_SYSCALL)
 		{
-
 		  *tt = CALLC;
 		  tt++;
 		  *tt = (ULONG)co->does;
@@ -146,6 +125,10 @@ void parse(char *line)
 		    update_pointers(sizeof(ULONG)*2);
 		  }
 	}
+      tok = (char *)strtok(0," \t\n");
     }
+  
 }
+
+
 

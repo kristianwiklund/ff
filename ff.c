@@ -350,12 +350,14 @@ void exec(ULONG *what)
 editor()
 {
   char buf[8192];
+  int apa = 0;
   
   while(1)
     {
-      printf("> ");
+      printf("(%d)> ",apa);
       gets(buf);
       parse(buf);
+      apa++;
     }
 }
 
@@ -370,10 +372,7 @@ main()
   load_sysfun();
   loadcore(CORENAME);
 
-/*monitor();*/
-editor();
-
-
+  editor();
 
   remove_sm();
 

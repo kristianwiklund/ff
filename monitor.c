@@ -86,8 +86,7 @@ void monitor()
 	  else
 	    {
 	      puts(cmd);
-	      if(tt->builds)
-		printf("Builds: %x\n",((ULONG)tt->builds-(ULONG)ws)/sizeof(ULONG));
+
 	      if(tt->does)
 	      printf("Does: %x\n",((ULONG)tt->does-(ULONG)ws)/sizeof(ULONG));
 	      printf("Header: %x\n\n",(((ULONG)tt)-(ULONG)ws)/sizeof(ULONG));

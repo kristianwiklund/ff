@@ -1,8 +1,10 @@
 #ifndef FF_H
 #define FF_H
 
-#define SCRWIDTH 80
 #define CORENAME "/users/dtek/d91/d1wzm/cfiler/ff/forthcore"
+#define SCREENDIR "/users/dtek/d91/d1wzm/cfiler/ff/screens"
+
+#define TPA_SIZE 2000
 
 /* type def's for amoeba compat */
 

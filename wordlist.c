@@ -4,6 +4,8 @@
 
 extern ULONG *stusp; /* this is really the start of the wordlist */
 extern ULONG *usp;
+extern ULONG *hre;
+extern int defmode;
 
 struct wordlist *lastentered;
 char *topoflist;
@@ -26,6 +28,8 @@ BOOL make_word_header(char *name)
 {
   struct wordlist *t;
   
+  defmode = 1;
+
   t = (struct wordlist *)topoflist;
 
   if(topoflist>=(char *)usp)
@@ -77,7 +81,7 @@ BOOL forget_words(char *str)
 
   t->next = 0;
   t->name[0] = 0;
-  t->builds = 0;
+
   t->does = 0;
   t->flags = 0;
 
@@ -118,13 +122,15 @@ void list_list()
 	return;
 
       printf("%s ",t->name);
-      cnt+=strlen(t->name);
-      if(cnt>=SCRWIDTH-SCRWIDTH/10)
-	printf("\n");
-
+      cnt++;
+      if(cnt>=5)
+	{
+	  cnt=0;
+	  printf("\n");
+	}
       t=t->next;
     }
-  printf("\n");
+  printf("\n\n");
 }
 
 void rehash()
@@ -147,6 +153,14 @@ void rehash()
   
 void update_pointers(ULONG n)
 {
+  ULONG apa;
+  apa = (ULONG)hre;
+  apa+=n;
+  hre = (ULONG *)apa;
+
+  if(!defmode)
+    return;
+
   topoflist = topoflist + n;
   lastentered->next = (struct wordlist *)topoflist;
 }

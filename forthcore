@@ -22,18 +22,16 @@ inline swap POP TTT POP TTA TFT PUSH TFA PUSH ;
 
 call = POP TTT POP CMP BEQ +5 LOADIM 0 PUSH RTS LOADIM 0x1 PUSH RTS ;
 
-: if BEQ TEST POP 3 comp here 0 1 comp ;
-: else BRA 1 comp here 0 1 comp swap dup here swap - il / , ;
-: then dup here swap - il / , ;
+p : if BEQ TEST POP 3 comp here 0 1 comp ; immediate
+p : else BRA 1 comp here 0 1 comp swap dup here swap - il / , ; immediate
+p : then dup here swap - il / , ; immediate
 
-: do PD POP PD POP 4 comp here ;
-: +loop BNE PD TFT PD CMP DP TTT ADT POP TTT DP 11 comp here - il / 1 comp DP DP 2 comp ;
+p : do PD POP PD POP 4 comp here ; immediate
+p : +loop BNE PD TFT PD CMP DP TTT ADT POP TTT DP 11 comp here - il / 1 comp DP DP 2 comp ; immediate
 
-* : cr 13 emit 12 emit ;
-: repeat here ;
-: until BEQ TEST POP 3 comp here - il / 1 comp ;
+p : repeat here ; immediate
+p : until BEQ TEST POP 3 comp here - il / 1 comp ; immediate
+p 0 load
+*
 
-* : apa 1 0 10 do 1 + dup . 1 +loop ;
-* : bepa 0 repeat 1 + dup . 32 emit dup 10 = until ;
-* : cepa = if 42 emit else 64 emit then cr ;
-* : depa = if 42 emit then cr ;
+

@@ -13,72 +13,6 @@ char *strs(char *a)
   return a;
 }
 
-/* some specials */
-
-void gh()
-{
-  dreg = (ULONG)here();
-  push();
-}
-
-void comp()
-{
-  int i,j;
-  
-  ULONG *apa;
-  apa = (ULONG *)here();
-
-  pop();
-  i = dreg;
-
-  for(j=0;j<i;j++)
-    {
-      pop();
-      *apa=dreg;
-      apa++;
-      update_pointers(sizeof(ULONG));
-    }
-}
-
-void emit()
-{
-  pop();
-  printf("%c",dreg);
-}
-
-void dot()
-{
-  pop();
-  printf("%d",dreg);
-}
-
-void str()
-{
-  printf("%s",(char *)areg);
-}
-
-void name()
-{
-  char *apa,*where,bepa[2];
-
-  pop();
-
-  bepa[1] = 0;
-  bepa[0] = (char)(dreg&0xff);
- 
-  apa = (char *)strtok(0,bepa);
-  where  = (char *)here();
-
-  while(*apa)
-    {
-      *where = *apa;
-      where++;
-      apa++;
-    }
-  where  = (char *)((((ULONG)where)/4 + 1)*4);
-  update_pointers((ULONG)where-(ULONG)here());
-}
-
 void loadcore(char *filename)
 {
   FILE *in;
@@ -105,25 +39,24 @@ void loadcore(char *filename)
     {
       fgets(buf,8192,in);
 
-/*      buf = (char *)strs(buf);
-*/ 
-      if(*buf==':')
+
+ 
+      if(*buf=='p')
 	{
-	  printf("Parsing %s",buf);
-	  parse(buf);
-	  ((struct wordlist *)get_last())->flags = W_SMUDGE | W_IMMEDIATE;
+	  printf("Parsing %s",buf+1);
+	  parse(buf+1);
+/*	  ((struct wordlist *)get_last())->flags = W_SMUDGE | W_IMMEDIATE;*/
 	}
       else
       if(buf[0]!='*' && buf[0]!='#' && buf[0]!='\n')
 	{
-	
 	  tn = (char *)strtok(strs(buf)," \t");
 	  
 	  if(tn)
 	    {
 	      make_word_header((char *)strtok(0," "));
 	      t = (struct wordlist *)get_last();
-	      t->builds=0;
+
 	      t->does = (ULONG *)((ULONG)get_last()+sizeof(struct wordlist));
 	      t->flags = W_SMUDGE | (W_INLINE * !strcmp(tn,"inline"));
 	      pt = (ULONG *)t->does;
@@ -153,9 +86,9 @@ void loadcore(char *filename)
 		      if(*tok=='-' || *tok=='+')
 			{
 			  sscanf(tok,"%d",pt);
-/*			  *pt = *pt * sizeof(ULONG); */
+
 			  *pt=*pt * (1-2*(*tok=='-'));
-/*			  *pt=*pt + here(); */
+
 			}
 		      else
 			if(co = find_word(tok))
@@ -163,7 +96,7 @@ void loadcore(char *filename)
 			    printf("%s",co->name);
 			    *pt = CALLC;
 			    pt++;
-			    *pt = co->does;
+			    *pt = (ULONG)co->does;
 			    update_pointers(sizeof(ULONG));
 			  }
 			else
