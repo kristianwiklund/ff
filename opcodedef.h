@@ -41,7 +41,11 @@
 #define CLR     0x25
 #define NOP     0x26
 #define BRA     0x27
+#define LOADSS  0x28
+#define STORESS 0x29
+#define INC     0x2a
+#define DEC     0x2b
 
-#define NROPCODES       0x28
+#define NROPCODES       0x2c
 
 #endif OPCODEDEF_H

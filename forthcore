@@ -5,33 +5,58 @@
 * inline defines things to enter 'inline' in usr code
 * call defines things to enter with 'call'
 * '*' signifies a comment
+* if you want to send a line to the normal parser/compiler put a
+* 'p' in front of that line
 
 #include "opcodedef.h"
 
 * we include opcodedef.h and use 'cpp' to process it. makes it a lot
 * simpler for me :)
 
+* first we define some standard words...
+
 inline + POP TTT POP ADT PUSH ;
 inline - POP TTT POP SBT PUSH ;
-inline , POP TTT POP TTA TFT STOREA 0 ;
+inline ! POP TTT POP TTA TFT STOREA 0 ;
 inline @ POP TTA LOADA 0 PUSH ;
 inline dup LOADS 0 PUSH ;
 call rot POP TTT POP TTA POP PT PA
 	 PD TP DP AP PUSH TFA PUSH TFT PUSH RTS ;
 inline swap POP TTT POP TTA TFT PUSH TFA PUSH ;
-
+call 1+ LOADIM 0x1 TTT LOADS 0 ADT STORES 0 RTS ;
+call 1- LOADIM 0x1 TTT LOADS 0 SBT STORES 0 RTS ;
+inline drop POP ;
 call = POP TTT POP CMP BEQ +5 LOADIM 0 PUSH RTS LOADIM 0x1 PUSH RTS ;
+call > POP TTT POP CMP BGT +5 LOADIM 0 PUSH RTS LOADIM 0x1 PUSH RTS ;
+call < POP TTT POP CMP BLT +5 LOADIM 0 PUSH RTS LOADIM 0x1 PUSH RTS ;
+call <= POP TTT POP CMP BLE +5 LOADIM 0 PUSH RTS LOADIM 0x1 PUSH RTS ;
+call >= POP TTT POP CMP BGE +5 LOADIM 0 PUSH RTS LOADIM 0x1 PUSH RTS ;
 
-p : if BEQ TEST POP 3 comp here 0 1 comp ; immediate
+* ...and after them some of the more advanced who affects the
+* compilation etc
+
+* definition of the IF-ELSE-THEN structure
+
+p : , here swap ! here 1+ 'here swap ! ;
+p : if BEQ POP 2 comp here 0 1 comp ; immediate
 p : else BRA 1 comp here 0 1 comp swap dup here swap - il / , ; immediate
 p : then dup here swap - il / , ; immediate
 
+* definition of the DO-+LOOP structure
+
 p : do PD POP PD POP 4 comp here ; immediate
-p : +loop BNE PD TFT PD CMP DP TTT ADT POP TTT DP 11 comp here - il / 1 comp DP DP 2 comp ; immediate
+p : +loop BNE 0x0 STORESS TFT CMP 0x1 LOADSS TTT ADT POP TTT 0x0 LOADSS 13 comp here - il / 1 comp DP DP 2 comp ; immediate
+
+* definition of the REPEAT-UNTIL structure
 
 p : repeat here ; immediate
-p : until BEQ TEST POP 3 comp here - il / 1 comp ; immediate
+p : until BEQ POP 2 comp here - il / 1 comp ; immediate
+
+* finally, invoke loading of screen 0. perhaps this isn't the right place
+* to do this, but who cares anyway? (I don't...)
+
 p 0 load
-*
+
+* end of core definitions
 
 

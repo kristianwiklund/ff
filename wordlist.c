@@ -74,28 +74,25 @@ struct wordlist *find_word(char *str)
 
 BOOL forget_words(char *str)
 {
-  struct wordlist *t;
-  
-  if(!(t = find_word(str))) /* find last occurance of 'str' */
+  struct wordlist *t,*o;
+  char *p,*q;
+
+  if(!(t = o = find_word(str))) /* find last occurance of 'str' */
     return (BOOL)0;
-
-  t->next = 0;
-  t->name[0] = 0;
-
-  t->does = 0;
-  t->flags = 0;
-
+  
   while(t)
     {
       if(!t->name[0])
 	break;
 
       remove_hashentry(t->name);
-      
+      p = (char *)t;
       t=t->next;
     }
-
-  topoflist = (char *)t;
+  for(q=(char *)o;q<(char *)t;q++)
+    *q=0;
+    
+  topoflist = (char *)o;
   lastentered = 0; /* it gets autovoided */
 
   rehash();
@@ -115,7 +112,7 @@ void list_list()
       puts("<empty>");
       return;
     }
-
+  
   while(t)
     {
       if(!t->name[0])

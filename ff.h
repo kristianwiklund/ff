@@ -88,7 +88,7 @@ void init_sm();
 void exec_opcode();
 void exec(ULONG *what);
 
-void monitor();
+void sm_monitor();
 #endif FF_H
 
 

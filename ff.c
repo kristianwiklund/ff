@@ -4,27 +4,36 @@
 
 ULONG dreg,areg,treg,*ssp,*usp,*pc,*stssp,*stusp;
 UWORD ccreg;
+extern ULONG *hre;
+
+ULONG tpa[TPA_SIZE];
+
 
 void (*func[NROPCODES])();
+void test();
 
 void loadim()
 {
 	dreg = fetch();
+	test();
 }
 
 void load()
 {
 	dreg = *((ULONG *)fetch());
+	test();
 }
 
 void loada()
 {
 	dreg = *(((ULONG *)areg)+fetch());
+	test();
 }
 
 void loads()
 {
 	dreg = *(usp+fetch());
+	test();
 }
 
 void test()
@@ -35,6 +44,7 @@ void test()
 void pop()
 {
 	dreg = *usp++;
+	test();
 }
 
 void push()
@@ -64,7 +74,7 @@ void blet()
 
 void bgt()
 {
-	if(~ccreg & (NFLAG | ZFLAG))
+	if(!(ccreg & (NFLAG | ZFLAG)))
 	  pc += ((ULONG)fetch()-1);
 	else 
 		pc++;
@@ -72,7 +82,7 @@ void bgt()
 
 void ble()
 {
-	if(ccreg & NFLAG)
+	if(ccreg & (NFLAG | ZFLAG))
 		pc += ((ULONG)fetch()-1);
 	else
 		pc++;
@@ -89,6 +99,7 @@ void bge()
 void loadst()
 {
 	dreg = *(usp + treg);
+	test();
 }
 
 void loadat()
@@ -138,20 +149,21 @@ void pt()
 
 void dp()
 {
-	dreg = *ssp;
-	ssp++;
+	dreg = *ssp++;
+	test();
 }
 
 void ap()
 {
-	areg = *ssp;
-	ssp++;
+	areg = *ssp++;
+	test();
 }
 
 void tp()
 {
 	treg = *ssp;
 	ssp++;
+	test();
 }
 
 void call()
@@ -214,8 +226,8 @@ void cmp()
 
 void rts()
 {
-	pc = (ULONG *)*ssp;
-	ssp++;
+	pc = (ULONG *)*ssp++;
+
 }
 
 void bne()
@@ -242,7 +254,25 @@ void bra()
   pc+=(ULONG)(fetch()-1);
 }
 
-
+void loadss()
+{
+  dreg = *(ssp + (ULONG)fetch());
+  test();
+}
+void storess()
+{
+  *(ssp + (ULONG)fetch()) = dreg;
+}
+void inc()
+{
+  dreg++;
+  test();
+}
+void dec()
+{
+  dreg--;
+  test();
+}
 void set_up_stacks()
 {
 	if(!(ssp = (ULONG *)malloc(sizeof(ULONG)*SYSSTACKSIZE)))
@@ -308,6 +338,10 @@ void init_fn_tab()
 	func[CLR]	= clr;
 	func[JMP]	= jmp;
 	func[BRA]       = bra;
+	func[LOADSS]    = loadss;
+	func[STORESS]   = storess;
+	func[INC]       = inc;
+	func[DEC]       = dec;
 }
 
 void init_sm()
@@ -318,10 +352,8 @@ void init_sm()
 	
 ULONG fetch()
 {
-  int t;
-  t = *(ULONG *)pc;
-  pc++;
-  return t;
+  return (ULONG)*pc++;
+
 }
 
 void exec_opcode()
@@ -338,13 +370,13 @@ void exec_opcode()
 
 void exec(ULONG *what)
 {
-	dreg = 0;
-	pd();
-	
-	pc = what;
-	
-	while(pc)
-		exec_opcode();
+  ssp--;
+  *ssp=0;
+  
+  pc = what;
+  
+  while(pc)
+    exec_opcode();
 }
 
 editor()
@@ -356,6 +388,7 @@ editor()
     {
       printf("(%d)> ",apa);
       gets(buf);
+      hre = tpa;
       parse(buf);
       apa++;
     }
@@ -368,6 +401,8 @@ main()
 
   init_sm();
   init_wordlist();
+
+  hre = tpa;
 
   load_sysfun();
   loadcore(CORENAME);

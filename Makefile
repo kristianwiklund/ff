@@ -6,7 +6,7 @@ OBJECTS = ff.o hashing.o monitor.o wordlist.o loadcore.o parse.o sysfun.o
 
 all: ff
 
-$(OBJECTS): $(HEADERS)
+$(OBJECTS): $(HEADERS) Makefile
 
 ff: $(OBJECTS) $(SOURCES) $(HEADERS)
 	$(CC) $(CFLAGS) -o ff $(OBJECTS) 

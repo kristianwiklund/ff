@@ -7,15 +7,68 @@
 
 extern struct wordlist *lastentered;
 extern ULONG dreg,areg,treg;
-extern ULONG *ssp,*usp,*hre;
+extern ULONG *ssp,*usp,*hre,*pc;
 extern char *topoflist;
 extern int defmode;
 
+void sf_print()
+{
+  char *apa;
+
+  apa = (char *)*usp;
+  usp++;
+  printf("%s",apa);
+}
+
+void sf_dotquote()
+{
+  char *apa,*bepa,*baba;
+  ULONG *h;
+
+  apa = baba = (char *)strtok(0,"\"\n");
+  if(!apa)
+    return;
+
+  h = hre;
+
+  *h = BRA;
+  h++;
+  *h = 0;
+  h++;
+  bepa = (char *)h;
+
+  while(*apa)
+    {
+      *bepa = *apa;
+      apa++;
+      bepa++;
+    }
+  *bepa = 0;
+
+  bepa = (char *)((strlen(baba)+1)/sizeof(ULONG));
+  *(h-1)=(ULONG)bepa+2;
+
+  apa = (char *)h;
+  h +=(ULONG)bepa+1;
+  *h = LOADIM;
+  h++;
+  *h = (ULONG)apa;
+  h++;
+  *h = PUSH;
+  h++;
+  *h = CALLC;
+  h++;
+  *h = (ULONG)sf_print;
+  h++;
+
+  update_pointers(sizeof(ULONG)*(8+(int)bepa));
+}
 void sf_load()
 {
   int screen;
   char fn[250];
   FILE *in;
+  ULONG *opc;
 
   screen = *usp;
   usp++;
@@ -33,7 +86,9 @@ void sf_load()
     {
       if(!fgets(fn,250,in))
 	break;
+      opc = pc;
       parse(fn);
+      pc = opc;
     }
   fclose(in);
 }
@@ -52,7 +107,14 @@ void sf_defword()
   hre = (ULONG *)topoflist;
   lastentered->does = hre;
 
+}
 
+void sf_forget()
+{
+  char *apa;
+  
+  apa = (char *)strtok(0," \t\n");
+  forget_words(apa);
 }
 
 /* ; */
@@ -60,7 +122,8 @@ void sf_defword()
 void sf_endword()
 {
   *hre = RTS;
-
+  hre++;
+  *hre = 0;
   update_pointers(sizeof(ULONG));
   hre = (ULONG *)*usp;
   usp++;
@@ -146,6 +209,8 @@ sf_quit()
 
 void load_sysfun()
 {
+  create_simple_word("forget",(ULONG *)sf_forget,M_SYSCALL|W_IMMEDIATE);
+  create_simple_word(".\"",(ULONG *)sf_dotquote,M_SYSCALL|W_IMMEDIATE);
   create_simple_word("immediate",(ULONG *)sf_immediate,M_SYSCALL);
   create_simple_word("here",(ULONG *)sf_here,M_SYSCALL);
   create_simple_word("comp",(ULONG *)sf_comp,M_SYSCALL);
@@ -157,8 +222,9 @@ void load_sysfun()
   create_simple_word(":",(ULONG *)sf_defword,M_SYSCALL|W_IMMEDIATE);
   create_simple_word(";",(ULONG *)sf_endword,M_SYSCALL|W_IMMEDIATE);
   create_simple_word("quit",(ULONG *)sf_quit,M_SYSCALL);
-  create_simple_word("monitor",(ULONG *)monitor,M_SYSCALL);
+  create_simple_word("monitor",(ULONG *)sm_monitor,M_SYSCALL);
   create_simple_word("load",(ULONG *)sf_load,M_SYSCALL);
+  create_simple_word("print",(ULONG *)sf_print,M_SYSCALL);
 
   /* sysvars */
 

@@ -16,7 +16,7 @@ char *opcodes[] =
 extern ULONG dreg,areg,treg,*ssp,*usp,*pc,*stssp,*stusp;
 extern UWORD ccreg;
 
-void monitor()
+void sm_monitor()
 {
   char cmd[250];
   ULONG i,from,to,q,t;

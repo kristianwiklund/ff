@@ -2,7 +2,6 @@
 #include "ff.h"
 #include "opcodedef.h"
 
-ULONG tpa[TPA_SIZE];
 ULONG *hre;
 
 int defmode;
@@ -16,13 +15,15 @@ void parse(char *line)
 {
   char *tok,buf[8192];
   struct wordlist *co;
-  ULONG *tt,*loc,*ttt;
+  ULONG *tt,*loc,*ttt,*mytpa;
   int i;
   void (*apa)();
 
   defmode = 0;
 
-  hre = tt = tpa;
+/*  hre = tt = tpa; */
+  
+  tt = mytpa = hre;
 
   line = strs(line); /* remove blanks */
   
@@ -30,13 +31,13 @@ void parse(char *line)
 
   while(1)
     {
-      if(tok && *tok=='\n')
+      if((tok && *tok=='\n') || (tok && *tok=='#'))
 	{
 	  if(!defmode)
 	    {
 	      *tt = RTS;
 	      update_pointers(sizeof(ULONG));
-	      exec(tpa);
+	      exec(mytpa);
 	      return;
 	    }
 	  else
@@ -49,7 +50,7 @@ void parse(char *line)
 	{
 	  *tt = RTS;
 	  update_pointers(sizeof(ULONG));
-	  exec(tpa);
+	  exec(mytpa);
 	  return;
 	}
 
