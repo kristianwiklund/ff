@@ -1,0 +1,39 @@
+* forthcore
+* the standard 'assembler' forth definitions for ff 
+* k. wiklund 1993
+
+* inline defines things to enter 'inline' in usr code
+* call defines things to enter with 'call'
+* '*' signifies a comment
+
+#include "opcodedef.h"
+
+* we include opcodedef.h and use 'cpp' to process it. makes it a lot
+* simpler for me :)
+
+inline + POP TTT POP ADT PUSH ;
+inline - POP TTT POP SBT PUSH ;
+inline , POP TTT POP TTA TFT STOREA 0 ;
+inline @ POP TTA LOADA 0 PUSH ;
+inline dup LOADS 0 PUSH ;
+call rot POP TTT POP TTA POP PT PA
+	 PD TP DP AP PUSH TFA PUSH TFT PUSH RTS ;
+inline swap POP TTT POP TTA TFT PUSH TFA PUSH ;
+
+call = POP TTT POP CMP BEQ +5 LOADIM 0 PUSH RTS LOADIM 0x1 PUSH RTS ;
+
+: if BEQ TEST POP 3 comp here 0 1 comp ;
+: else BRA 1 comp here 0 1 comp swap dup here swap - il / , ;
+: then dup here swap - il / , ;
+
+: do PD POP PD POP 4 comp here ;
+: +loop BNE PD TFT PD CMP DP TTT ADT POP TTT DP 11 comp here - il / 1 comp DP DP 2 comp ;
+
+* : cr 13 emit 12 emit ;
+: repeat here ;
+: until BEQ TEST POP 3 comp here - il / 1 comp ;
+
+* : apa 1 0 10 do 1 + dup . 1 +loop ;
+* : bepa 0 repeat 1 + dup . 32 emit dup 10 = until ;
+* : cepa = if 42 emit else 64 emit then cr ;
+* : depa = if 42 emit then cr ;

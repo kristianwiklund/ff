@@ -1,0 +1,10 @@
+loadim
+1
+ttt
+loadim
+4
+push
+sbt
+bne
+!105
+rts

@@ -1,0 +1,69 @@
+# 1 "/users/dtek/d91/d1wzm/cfiler/ff/forthcore" 
+* forthcore.f
+* the standard 'assembler' forth definitions for ff 
+* k. wiklund 1993
+
+* inline defines things to enter 'inline' in usr code
+* call defines things to enter with 'call'
+* '*' signifies a comment
+
+# 1 "/users/dtek/d91/d1wzm/cfiler/ff/opcodedef.h" 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 10 "/users/dtek/d91/d1wzm/cfiler/ff/forthcore" 2
+
+* we include opcodedef.h and use 'cpp' to process it. makes it a lot
+* simples for me :)
+
+inline + 0x05 0x1c 0x05 0x1f 0x06 ;
+inline - 0x05 0x1b 0x05 0x1c 0x1d 0x20 0x06 ;
+inline , 0x05 0x1c 0x05 0x1b 0x1e 0x0f 0 ;
+inline @ 0x05 0x1b 0x02 0 0x06 ;
+inline DUP 0x03 0 0x06 ;
+
+
+
