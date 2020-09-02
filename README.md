@@ -14,4 +14,5 @@ Things that used to work in 1993 but do not work now:
 * Non-critical:
   * There is a crapload of compiler warnings. It still builds.
   * "12 emit" clears the screen, it used to do a newline
+  * I use cpp to preprocess the core definitions. "Modern" cpp pukes at some of the text
   
