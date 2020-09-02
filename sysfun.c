@@ -173,14 +173,14 @@ void sf_emit()
 
 void sf_dot()
 {
-  printf("%d",*usp);
+  printf("%ld",*usp);
   usp++;
 }
 
 void create_simple_word(char *name,ULONG *ptr,UWORD flags)
 {
-  printf("Creating sys word %s at %x.\n",name,ptr);
-
+  printf("Creating sys word %s at %lx.\n",name,ptr);
+ 
   make_word_header(name);
   set_does_ptr(ptr);
   set_flags(flags);

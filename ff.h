@@ -1,6 +1,12 @@
 #ifndef FF_H
 #define FF_H
 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+
 #define CORENAME "forthcore"
 #define SCREENDIR "screens"
 
@@ -71,6 +77,10 @@ struct hashentry *find_empty(char *key);
 BOOL enter_hash(char *key,struct wordlist *code,UBYTE flags);
 void test_hash();
 void remove_hashentry(char *key);
+
+/* */
+
+void parse (char *);
 
 /* virtual CPU defs, structs and protos */
 

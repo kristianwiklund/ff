@@ -387,14 +387,14 @@ editor()
   while(1)
     {
       printf("(%d)> ",apa);
-      gets(buf);
+      fgets(buf, sizeof(buf), stdin);
       hre = tpa;
       parse(buf);
       apa++;
     }
 }
 
-main()
+int main()
 {
   puts("\nFisherman's Friend V0.89");
   puts("(C) K. Wiklund 1993");
