@@ -21,6 +21,8 @@ void parse(char *line)
 
   defmode = 0;
 
+  debuglog( "parse: %s\n", line);
+  
 /*  hre = tt = tpa; */
   
   tt = here();

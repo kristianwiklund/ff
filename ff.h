@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-
+#include <dmalloc.h>
 
 #define CORENAME "forthcore"
 #define SCREENDIR "screens"
@@ -99,6 +99,14 @@ void exec_opcode();
 void exec(ULONG *what);
 
 void sm_monitor();
+
+void set_does_ptr(ULONG *does);
+
+ULONG *here();
+
+/* debug messages, if needed. Now simply suppressing them */
+#define debuglog(...)
+
 #endif FF_H
 
 

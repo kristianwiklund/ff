@@ -8,7 +8,7 @@ extern ULONG *hre;
 
 int ustackptr=0;
 
-ULONG tpa[TPA_SIZE];
+ULONG *tpa;
 
 
 void (*func[NROPCODES])();
@@ -46,12 +46,14 @@ void test()
 void pop()
 {
 	dreg = *usp++;
+	debuglog( "ustackptr=%d\n", ++ustackptr);
 	test();
 }
 
 void push()
 {
 	usp--;
+	debuglog( "ustackptr=%d\n", --ustackptr);
 	*usp = dreg;
 }
 
@@ -280,7 +282,7 @@ void set_up_stacks()
 {
   // allocate stacks with some margins
 
-  fprintf(stderr, "Allocating memory. sizeof(ULONG)=%x, sizeof(ULONG *)=%x, sizeof(void *)=%x\n", sizeof(ULONG), sizeof(ULONG *), sizeof(void *));
+  debuglog( "Allocating memory. sizeof(ULONG)=%x, sizeof(ULONG *)=%x, sizeof(void *)=%x\n", sizeof(ULONG), sizeof(ULONG *), sizeof(void *));
   if(!(ssp = (ULONG *)calloc(100+SYSSTACKSIZE, sizeof(ULONG))))
 		exit(-128);
 	
@@ -395,7 +397,9 @@ editor()
     {
       printf("(%d)> ",apa);
       fgets(buf, sizeof(buf), stdin);
+      debuglog( "********** here = %x, tpa= %x\n", hre, tpa);
       hre = tpa;
+      debuglog( "********** here' = %x, tpa= %x\n", hre, tpa);
       parse(buf);
       apa++;
     }
@@ -409,9 +413,11 @@ int main()
   init_sm();
   init_wordlist();
 
+  tpa = calloc(TPA_SIZE, sizeof(ULONG));
   hre = tpa;
 
   load_sysfun();
+  debuglog( "System functions loaded, now loading core\n");
   loadcore(CORENAME);
 
   editor();

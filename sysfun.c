@@ -18,7 +18,7 @@ void sf_print()
 
   apa = (char *)*usp;
   usp++;
-  fprintf(stderr, "ustackptr=%d\n", ++ustackptr);
+  debuglog( "ustackptr=%d\n", ++ustackptr);
   printf("%s",apa);
 }
 
@@ -74,7 +74,7 @@ void sf_load()
 
   screen = *usp;
   usp++;
-  fprintf(stderr, "ustackptr=%d\n", ++ustackptr);
+  debuglog( "ustackptr=%d\n", ++ustackptr);
   sprintf(fn,"%s/%d",SCREENDIR,screen);
   printf("Loading %s\n",fn);
 
@@ -102,14 +102,14 @@ void sf_defword()
   char *a;
 
   usp--;
-  fprintf(stderr, "ustackptr=%d stashing here=%x\n", --ustackptr, here());
+  debuglog( "ustackptr=%d stashing here=%x %lx\n", --ustackptr, here(), here());
   // stash here
   *usp = here();
-  fprintf(stderr, "*usp=%x\n", *usp);
+  debuglog( "*usp=%x\n", *usp);
   a = (char *)strtok(0," ");
   make_word_header(a);
   hre = (ULONG *)topoflist;
-  fprintf(stderr, "defword hre=%x\n", hre);
+  debuglog( "defword hre=%x\n", hre);
   lastentered->does = hre;
 
 }
@@ -128,13 +128,13 @@ void sf_endword()
 {
   *hre = RTS;
   hre++;
-  fprintf(stderr, "endword 1 hre=%x\n", hre);
+  debuglog( "endword 1 hre=%x\n", hre);
   *hre = 0;
   update_pointers(sizeof(ULONG));
   hre = (ULONG *)*usp; // pull PC from stack.
-  fprintf(stderr, "endword 2 hre=%x\n", hre);
+  debuglog( "endword 2 hre=%x\n", hre);
   usp++;
-  fprintf(stderr, "ustackptr=%d pulled here=%x\n", ++ustackptr, hre);
+  debuglog( "ustackptr=%d pulled here=%x\n", ustackptr++, hre);
   defmode = 0;
   lastentered->flags|=W_SMUDGE;
 }
@@ -149,7 +149,7 @@ void sf_immediate()
 void sf_here()
 {
   usp--;
-  fprintf(stderr, "ustackptr=%d\n", --ustackptr);
+  debuglog( "ustackptr=%d\n", --ustackptr);
   *usp = (ULONG)here();
 }
 
@@ -164,13 +164,13 @@ void sf_comp()
 
   i = *usp;
   usp++;
-  fprintf(stderr, "ustackptr=%d\n", ++ustackptr);
+  debuglog( "ustackptr=%d\n", ++ustackptr);
 
   for(j=0;j<i;j++)
     {
       *apa = *usp;
       usp++;
-      fprintf(stderr, "ustackptr=%d\n", ++ustackptr);
+      debuglog( "ustackptr=%d\n", ++ustackptr);
       apa++;
       update_pointers(sizeof(ULONG));
     }
@@ -180,14 +180,14 @@ void sf_emit()
 {
   putchar((char)*usp);
   usp++;
-  fprintf(stderr, "ustackptr=%d\n", ++ustackptr);
+  debuglog( "ustackptr=%d\n", ++ustackptr);
 }
 
 void sf_dot()
 {
   printf("%ld",*usp);
   usp++;
-  fprintf(stderr, "ustackptr=%d\n", ++ustackptr);
+  debuglog( "ustackptr=%d\n", ++ustackptr);
 }
 
 void create_simple_word(char *name,ULONG *ptr,UWORD flags)
@@ -202,7 +202,7 @@ void create_simple_word(char *name,ULONG *ptr,UWORD flags)
 sf_div()
 {
   usp++;
-  fprintf(stderr, "ustackptr=%d\n", ++ustackptr);
+  debuglog( "ustackptr=%d\n", ++ustackptr);
   *usp = (*usp / (UWORD)*(usp - 1));
 
 }
@@ -210,7 +210,7 @@ sf_div()
 sf_mul()
 {
   usp++;
-  fprintf(stderr, "ustackptr=%d\n", ++ustackptr);
+  debuglog( "ustackptr=%d\n", ++ustackptr);
   *usp = *usp * (*(usp-1));
 }
 

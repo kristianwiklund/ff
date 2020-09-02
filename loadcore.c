@@ -52,12 +52,12 @@ void loadcore(char *filename)
       else
 	if(buf[0]!='*' && buf[0]!='#' && buf[0]!='\n') /* do not parse the line if it is a comment line */
 	{
-	  puts(buf); /* this works */
+	  debuglog(buf); 
 	  btmp = strs(buf); /* remove leading spaces and tabs by increasing the pointer to after the leading whitespace */
-	  puts(btmp); /* this also works */
+	  debuglog(btmp); 
 	  tn = strtok(btmp," \t");
 	  
-	  puts(tn); /* this goes bad on linux */
+	  debuglog(tn); 
 	  
 	  if(tn)
 	    {
@@ -70,10 +70,11 @@ void loadcore(char *filename)
       	      t = (struct wordlist *)get_last();
 	      t->does = (ULONG *)((ULONG)get_last()+sizeof(struct wordlist));
 	      #endif
+	      debuglog( "lastentered name=%s\n", t->name);
 	      t->flags = W_SMUDGE | (W_INLINE * !strcmp(tn,"inline"));
 	      pt = (ULONG *)t->does;
 	      
-	      printf("Loading %s word %s\n",tn,t->name);
+	      debuglog("Loading %s word %s\n",tn,t->name);
 
 	      while(1)
 		{
@@ -115,12 +116,12 @@ void loadcore(char *filename)
 			  sscanf(tok,"0x%x",pt);
 		    }
 		  pt++;
-		  printf("0x%x ",*(pt-1));
+		  debuglog("0x%x ",*(pt-1));
 		  update_pointers(sizeof(ULONG));
 		  t->doesl++;
 		}
 	    }
-	  printf("\n");
+	  debuglog("\n");
 	}
     }
   

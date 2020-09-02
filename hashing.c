@@ -4,7 +4,7 @@
 
 struct hashentry *hashtable;
 
-/* fastforth hashing */
+/* hashing */
 
 void clear_table()
 {

@@ -15,6 +15,8 @@ Things that used to work in 1993 but do not work now:
   * Another segfault, caused by the really weird line               t->does = (ULONG *)((ULONG)get_last()+sizeof(struct wordlist));
     * This line sets the pointer does to the next element in the list, which seems to be (t+1) in normalspeak. I have no idea what the thinking was behind this.
     * Again, works on solaris, need change on linux.
+  * Segfault when stashing a pointer to the stack - works on Solaris.
+    * Due to not having the "here()" function defined with a proper prototype (i.e. same root cause as the string.h include problem)
 
 * Non-critical:
   * There is a crapload of compiler warnings. It still builds.
