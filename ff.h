@@ -5,7 +5,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <dmalloc.h>
 
 #define CORENAME "forthcore"
 #define SCREENDIR "screens"
