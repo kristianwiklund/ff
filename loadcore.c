@@ -26,7 +26,7 @@ void loadcore(char *filename)
 
   /* invoke cpp */
   
-  sprintf(buf,"cpp %s %s",filename,tmp);
+  sprintf(buf,"cpp %s %s 2>/dev/null",filename,tmp);
   system(buf);
 
   if(!(in = fopen(tmp,"r")))
