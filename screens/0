@@ -1,6 +1,6 @@
 forget cr
 
-: cr 13 emit ;
+: cr 10 emit 13 emit ;
 : space 32 emit ;
 
 2 load

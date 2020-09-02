@@ -10,7 +10,6 @@ int ustackptr=0;
 
 ULONG *tpa;
 
-
 void (*func[NROPCODES])();
 void test();
 
@@ -370,9 +369,9 @@ void exec_opcode()
 	ULONG tmp;
 	if((tmp = fetch())>=NROPCODES)
 	{
-		puts("Illegal opcode.");
-		pc = 0;
-		return;
+	  printf("Illegal opcode (%x)\n" , tmp);
+	  pc = 0;
+	  return;
 	}
 	func[tmp]();
 }
