@@ -41,7 +41,8 @@ BOOL make_word_header(char *name)
   t->name[15] = 0;
 
   t->flags = 0;
-  t->doesl = (ULONG) t->does = 0;
+  t->doesl = 0;
+  t->does = 0;
 
   update_pointers(sizeof(struct wordlist));
   return enter_hash(t->name,t,0);
