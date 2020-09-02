@@ -1,0 +1,13 @@
+forget cr
+
+: cr 12 emit 13 emit ;
+: space 32 emit ;
+
+2 load
+
+bold ." FF V1.37" cr
+normal
+
+forget bepa
+
+18 load

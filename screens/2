@@ -1,0 +1,22 @@
+." Loading VT100 ccw set." cr
+
+forget crsr_up
+
+: crsr_up 27 emit ." [A" ;
+: crsr_down 27 emit ." [B" ;
+: crsr_right 27 emit ." [C" ;
+: crsr_left 27 emit ." [D" ;
+: home 27 emit ." [H" ;
+: clr 27 emit ." [;H" 27 emit ." [2J" ;
+: beep 7 emit ;
+
+: underline 27 emit ." [4m" ;
+: normal 27 emit ." [m" ;
+: reverse 27 emit ." [7m" ;
+: blink 27 emit ." [5m" ;
+: bold 27 emit ." [1m" ;
+
+
+." Cursor control words loaded." cr
+
+

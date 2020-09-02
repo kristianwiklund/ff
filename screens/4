@@ -1,0 +1,5 @@
+# program to calculate prices.
+
+: moms 125 * ;
+
+

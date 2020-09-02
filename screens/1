@@ -1,0 +1,17 @@
+forget apa
+
+." Performance tester." cr
+
+: apa 0 0 100 do 1 + 1 +loop 2 * . ;
+: bepa 0 0 100 do 1 - 1 +loop 2 / . ;
+
+: cepa 0 100 do apa bepa 42 emit 1 +loop cr ;
+
+cepa 
+
+: epa 0 0 100 do 1 + dup dup 2 / 2 * = if 42 emit else 32 emit then 1 +loop ;
+
+epa
+
+." Done." cr
+

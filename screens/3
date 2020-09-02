@@ -1,0 +1,5 @@
+# test of multiple loading
+
+1 + dup . space
+
+3 load
