@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include <string.h>
 #include "ff.h"
 #include "opcodedef.h"
+#include <stdlib.h>
 
 extern ULONG areg,dreg;
 extern char *instream;
@@ -17,7 +19,7 @@ void loadcore(char *filename)
 {
   FILE *in;
   struct wordlist *t,*co;
-  char buf[8192],*tok,*tn,*tmp;
+  char buf[8192],*tok,*tn,*tmp, *btmp;
   ULONG *pt;
   
   tmp = tmpnam(0);
@@ -48,9 +50,14 @@ void loadcore(char *filename)
 /*	  ((struct wordlist *)get_last())->flags = W_SMUDGE | W_IMMEDIATE;*/
 	}
       else
-      if(buf[0]!='*' && buf[0]!='#' && buf[0]!='\n')
+	if(buf[0]!='*' && buf[0]!='#' && buf[0]!='\n') /* do not parse the line if it is a comment line */
 	{
-	  tn = (char *)strtok(strs(buf)," \t");
+	  puts(buf); /* this works */
+	  btmp = strs(buf); /* remove leading spaces and tabs by increasing the pointer to after the leading whitespace */
+	  puts(btmp); /* this also works */
+	  tn = strtok(btmp," \t");
+	  
+	  puts(tn); /* this goes bad on linux */
 	  
 	  if(tn)
 	    {

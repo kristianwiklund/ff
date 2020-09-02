@@ -10,6 +10,6 @@ $(OBJECTS): $(HEADERS) Makefile
 
 ff: $(OBJECTS) $(SOURCES) $(HEADERS)
 	$(CC) $(CFLAGS) -o ff $(OBJECTS) 
-	
+
 
 
