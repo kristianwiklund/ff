@@ -6,6 +6,8 @@ ULONG dreg,areg,treg,*ssp,*usp,*pc,*stssp,*stusp;
 UWORD ccreg;
 extern ULONG *hre;
 
+int ustackptr=0;
+
 ULONG tpa[TPA_SIZE];
 
 
@@ -273,12 +275,16 @@ void dec()
   dreg--;
   test();
 }
+
 void set_up_stacks()
 {
-  if(!(ssp = (ULONG *)calloc(1+SYSSTACKSIZE, sizeof(ULONG))))
+  // allocate stacks with some margins
+
+  fprintf(stderr, "Allocating memory. sizeof(ULONG)=%x, sizeof(ULONG *)=%x\n", sizeof(ULONG), sizeof(ULONG *));
+  if(!(ssp = (ULONG *)calloc(100+SYSSTACKSIZE, sizeof(ULONG))))
 		exit(-128);
 	
-  if(!(usp = (ULONG *)calloc(1+USERSTACKSIZE, sizeof(ULONG))))
+  if(!(usp = (ULONG *)calloc(100+USERSTACKSIZE, sizeof(ULONG))))
 		exit(-64);
 	
 	stssp=ssp;
@@ -286,6 +292,7 @@ void set_up_stacks()
 	
 	ssp+=SYSSTACKSIZE;
 	usp+=USERSTACKSIZE;
+	ustackptr=USERSTACKSIZE;
 }
 
 void remove_sm()
