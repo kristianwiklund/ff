@@ -103,9 +103,9 @@ void set_does_ptr(ULONG *does);
 
 ULONG *here();
 
-/* debug messages, if needed. Now simply suppressing them */
+/* debug messages, select one */
 #define debuglog(...)
-
+//#define debuglog(...) fprintf(stderr, __VA_ARGS__)
 #endif FF_H
 
 
