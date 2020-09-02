@@ -38,6 +38,10 @@ void parse(char *line)
 	{
 	  if(!defmode)
 	    {
+	      if (!tt) {
+		printf ("Preventing null pointer access - did you use ; without : ?\n");
+		return;
+	      }
 	      *tt = RTS;
 	      update_pointers(sizeof(ULONG));
 	      exec(mytpa);
@@ -51,7 +55,12 @@ void parse(char *line)
 	}
       if(!tok)
 	{
+	  if (!tt) {
+	    printf ("Preventing null pointer access - did you use ; without : ?\n");
+	    return;
+	  }
 	  *tt = RTS;
+
 	  update_pointers(sizeof(ULONG));
 	  exec(mytpa);
 	  return;
