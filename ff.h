@@ -1,8 +1,8 @@
 #ifndef FF_H
 #define FF_H
 
-#define CORENAME "/users/dtek/d91/d1wzm/cfiler/ff/forthcore"
-#define SCREENDIR "/users/dtek/d91/d1wzm/cfiler/ff/screens"
+#define CORENAME "forthcore"
+#define SCREENDIR "screens"
 
 #define TPA_SIZE 2000
 
