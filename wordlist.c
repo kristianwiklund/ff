@@ -152,10 +152,12 @@ void rehash()
 void update_pointers(ULONG n)
 {
   ULONG apa;
+  fprintf(stderr, "old hre=%x, add=%d\n", hre, n);
   apa = (ULONG)hre;
   apa+=n;
   hre = (ULONG *)apa;
-
+  fprintf(stderr, "hre=%x\n", hre);
+  
   if(!defmode)
     return;
 

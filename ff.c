@@ -280,7 +280,7 @@ void set_up_stacks()
 {
   // allocate stacks with some margins
 
-  fprintf(stderr, "Allocating memory. sizeof(ULONG)=%x, sizeof(ULONG *)=%x\n", sizeof(ULONG), sizeof(ULONG *));
+  fprintf(stderr, "Allocating memory. sizeof(ULONG)=%x, sizeof(ULONG *)=%x, sizeof(void *)=%x\n", sizeof(ULONG), sizeof(ULONG *), sizeof(void *));
   if(!(ssp = (ULONG *)calloc(100+SYSSTACKSIZE, sizeof(ULONG))))
 		exit(-128);
 	

@@ -105,10 +105,11 @@ void sf_defword()
   fprintf(stderr, "ustackptr=%d stashing here=%x\n", --ustackptr, here());
   // stash here
   *usp = here();
-  
+  fprintf(stderr, "*usp=%x\n", *usp);
   a = (char *)strtok(0," ");
   make_word_header(a);
   hre = (ULONG *)topoflist;
+  fprintf(stderr, "defword hre=%x\n", hre);
   lastentered->does = hre;
 
 }
@@ -127,9 +128,11 @@ void sf_endword()
 {
   *hre = RTS;
   hre++;
+  fprintf(stderr, "endword 1 hre=%x\n", hre);
   *hre = 0;
   update_pointers(sizeof(ULONG));
-  hre = (ULONG *)*usp; // pull PC from stack. 
+  hre = (ULONG *)*usp; // pull PC from stack.
+  fprintf(stderr, "endword 2 hre=%x\n", hre);
   usp++;
   fprintf(stderr, "ustackptr=%d pulled here=%x\n", ++ustackptr, hre);
   defmode = 0;
