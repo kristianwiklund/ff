@@ -14,7 +14,7 @@ void clear_table()
         size = HASHSIZE;
         
         if(!(hashtable = 
-        (struct hashentry *)malloc(sizeof(struct hashentry)*HASHSIZE)))
+	     (struct hashentry *)calloc(sizeof(struct hashentry),HASHSIZE)))
                 exit(256);
         
         t = (char *)hashtable;

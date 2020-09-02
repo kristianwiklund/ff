@@ -125,7 +125,7 @@ void sf_endword()
   hre++;
   *hre = 0;
   update_pointers(sizeof(ULONG));
-  hre = (ULONG *)*usp;
+  hre = (ULONG *)*usp; // pull PC from stack. 
   usp++;
   defmode = 0;
   lastentered->flags|=W_SMUDGE;

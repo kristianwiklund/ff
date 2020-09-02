@@ -275,10 +275,10 @@ void dec()
 }
 void set_up_stacks()
 {
-	if(!(ssp = (ULONG *)malloc(sizeof(ULONG)*SYSSTACKSIZE)))
+  if(!(ssp = (ULONG *)calloc(1+SYSSTACKSIZE, sizeof(ULONG))))
 		exit(-128);
 	
-	if(!(usp = (ULONG *)malloc(sizeof(ULONG)*USERSTACKSIZE)))
+  if(!(usp = (ULONG *)calloc(1+USERSTACKSIZE, sizeof(ULONG))))
 		exit(-64);
 	
 	stssp=ssp;

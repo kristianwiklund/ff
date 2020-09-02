@@ -23,9 +23,10 @@ void parse(char *line)
 
 /*  hre = tt = tpa; */
   
-  tt = mytpa = hre;
+  tt = here();
+  mytpa = here();
 
-  line = strs(line); /* remove blanks */
+  line = strs(line); /* remove leading blanks */
   
   tok = (char *)strtok(line," \t\n");
 
@@ -87,7 +88,7 @@ void parse(char *line)
 		}
 	      else
 		exec(co->does);
-	      tt = (ULONG *)here();
+	      tt = here();
 	    }
 	  else
 	    if(co->flags & W_INLINE)
