@@ -6,6 +6,7 @@
 
 extern ULONG areg,dreg;
 extern char *instream;
+extern struct wordlist *lastentered;
 
 char *strs(char *a)
 {
@@ -62,9 +63,14 @@ void loadcore(char *filename)
 	  if(tn)
 	    {
 	      make_word_header((char *)strtok(0," "));
-	      t = (struct wordlist *)get_last();
 
+	      #ifdef __linux__
+	      t = lastentered;
+	      t->does = t+1;
+	      #else
+      	      t = (struct wordlist *)get_last();
 	      t->does = (ULONG *)((ULONG)get_last()+sizeof(struct wordlist));
+	      #endif
 	      t->flags = W_SMUDGE | (W_INLINE * !strcmp(tn,"inline"));
 	      pt = (ULONG *)t->does;
 	      

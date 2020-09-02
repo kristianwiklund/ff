@@ -12,7 +12,9 @@ Things that used to work in 1993 but do not work now:
   * The software compiles (with the assignment change above) on both Linux and Openindiana (Solaris), but *segfaults on Linux*. It *works perfectly on Openindiana*.
     * The cause of the error is that something bad happens from the strtok on line 53 in loadcore.c and onwards when encountering the line "inline + 0x05 0x1c 0x05 0x1f 0x06 ;" which is the first "real" line in the core definitions.
     * For some reason, the strtok breaks on Linux. --> Fix: #include <string.h>, not needed on solaris
-
+  * Another segfault, caused by the really weird line               t->does = (ULONG *)((ULONG)get_last()+sizeof(struct wordlist));
+    * This line sets the pointer does to the next element in the list, which seems to be (t+1) in normalspeak. I have no idea what the thinking was behind this.
+    * Again, works on solaris, need change on linux.
 
 * Non-critical:
   * There is a crapload of compiler warnings. It still builds.
