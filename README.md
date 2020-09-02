@@ -4,7 +4,7 @@ Originally written in 1993. Be afraid :-)
 
 --
 
-Things that used to work in 1993 but do not work now:
+Things that used to work in 1993 that I had to fix now:
 
 
 * Critical:
@@ -19,7 +19,8 @@ Things that used to work in 1993 but do not work now:
     * Due to not having the "here()" function defined with a proper prototype (i.e. same root cause as the string.h include problem)
 
 * Non-critical:
-  * There is a crapload of compiler warnings. It still builds.
+  * There is a crapload of compiler warnings. It still builds. 
+    * I disabled a few of them that should be safe to display, see the Makefile for details
   * "12 emit" clears the screen, it used to do a newline
   * I use cpp to preprocess the core definitions. "Modern" cpp pukes at some of the text
   
