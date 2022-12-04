@@ -6,6 +6,8 @@ Originally written in 1993. Be afraid :-)
 
 Things that used to work in 1993 that I had to fix now:
 
+Several of these problems are due to weird pointer arithmetics assuming 32 bit pointers. Be afraid. 
+
 
 * Critical:
   * t->doesl = (ULONG) t->does = 0; // this doesn't compile with gcc7, had to be changed to two lines. It assigns zero to both doesl and does.
